@@ -1,0 +1,6 @@
+{
+    "name": "StudentOS",
+    "description": "an all in one website made for students that helps them with their school and personal life and becomes a friend for them in their teenage life, it helps with productivity, learning, and wellbeing for students featuring a customizable, responsive pixel companion.",
+    "requestFramePermissions": [],
+    "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
