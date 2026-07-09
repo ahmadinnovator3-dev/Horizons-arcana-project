@@ -39,7 +39,7 @@ import {
   FolderHeart
 } from 'lucide-react';
 
-// Subcomponents are imported or nested below
+
 import { SmartPlanner } from './SmartPlanner';
 import { FocusMode } from './FocusMode';
 import { MoodTracker } from './MoodTracker';
