@@ -56,7 +56,7 @@ npm run dev
 Open up http://localhost:5173 in your browser.
 
 ## AI Disclosure
-Yeah ngl I used AI a bit while building this, but mostly just as a pair-programmer to help me unblock annoying TypeScript bugs, fix build configs, and layout the basic structure. The actual concept, routing, UX decisions, and core logic are 100% mine. Kept the AI usage way under the 30% limit—it was basically just a smarter Stack Overflow for when things broke.
+Yeah ngl I used AI a bit while building this, but mostly just as a pair-programmer to help me unblock annoying TypeScript bugs, fix build configs, and layout the basic structure. The actual concept, routing, UX decisions, and core logic are 100% mine. Kept the AI usage way under the 30% limit. it was basically just a smarter Stack Overflow for when things broke.
 
 ### PS: 
 Since the sign up page is still under construction, you can view the dashboard by entering this email and password:
