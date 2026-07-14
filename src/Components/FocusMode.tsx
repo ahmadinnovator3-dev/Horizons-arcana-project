@@ -317,6 +317,3 @@ export const FocusMode: React.FC = () => {
     </div>
   );
 }
-
-
-

@@ -340,6 +340,3 @@ export const ChatLounge: React.FC = () => {
     </div>
   );
 };
-
-
-
