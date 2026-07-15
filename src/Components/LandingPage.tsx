@@ -20,7 +20,7 @@ import {
 } from 'lucide-react';
 
 export const LandingPage: React.FC = () => {
-  const { setView } = useApp();
+  const { setView, reviewerLogin } = useApp();
 
   const features = [
     {
@@ -83,7 +83,7 @@ export const LandingPage: React.FC = () => {
 
   return (
     <div className="min-h-screen pixel-bg text-slate-800 flex flex-col font-mono selection:bg-indigo-100">
-      {/* Navigation Header */}
+      {}
       <header className="sticky top-0 z-40 bg-white border-b-4 border-slate-900 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <div className="flex items-center gap-2 cursor-pointer" onClick={() => setView('landing')}>
@@ -110,7 +110,7 @@ export const LandingPage: React.FC = () => {
         </div>
       </header>
 
-      {/* Hero Section */}
+      {}
       <section className="relative overflow-hidden pt-12 pb-12 md:pt-20 md:pb-20">
         <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
           <motion.div
@@ -162,6 +162,13 @@ export const LandingPage: React.FC = () => {
               Get Started Free
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </button>
+            <button
+              onClick={reviewerLogin}
+              className="w-full sm:w-auto pixel-btn pixel-btn-red py-3 px-8 text-xs font-extrabold flex items-center justify-center gap-2"
+              id="reviewer-bypass-btn"
+            >
+              REVIEWER BYPASS BUTTON
+            </button>
             <a
               href="#showcase"
               className="w-full sm:w-auto pixel-btn pixel-btn-secondary py-3 px-8 text-xs font-extrabold"
@@ -172,7 +179,7 @@ export const LandingPage: React.FC = () => {
         </div>
       </section>
 
-      {/* Decorative Interactive UI mockup representation */}
+      {}
       <section className="px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto mb-16">
         <motion.div 
           initial={{ opacity: 0, scale: 0.96 }}
@@ -180,7 +187,7 @@ export const LandingPage: React.FC = () => {
           transition={{ delay: 0.5 }}
           className="bg-white border-4 border-slate-900 shadow-[8px_8px_0px_0px_rgba(15,23,42,1)] p-6 md:p-8 flex flex-col md:flex-row items-center gap-8 relative"
         >
-          {/* Top-bar window frame dots */}
+          {}
           <div className="absolute top-4 left-5 flex gap-1.5">
             <div className="w-3 h-3 bg-red-500 border border-slate-900" />
             <div className="w-3 h-3 bg-yellow-400 border border-slate-900" />
@@ -204,7 +211,7 @@ export const LandingPage: React.FC = () => {
           </div>
 
           <div className="w-full md:w-72 bg-slate-100 border-4 border-slate-900 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] py-8 flex flex-col items-center justify-center relative overflow-hidden group">
-            {/* Real responsive 2D pixel companion! */}
+            {}
             <div className="w-32 h-32 flex items-center justify-center relative">
               <PixelCompanion 
                 customization={{
