@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useApp } from '../Context/AppContext';
 import { Sparkles, Mail, Lock, User, Calendar, GraduationCap, Languages, ArrowRight } from 'lucide-react';
-// @ts-ignore
+
 import logoImage from '../assets/images/studentos_logo_1782397125648.jpg';
 
 export const AuthPages: React.FC<{ initialMode: 'login' | 'signup' }> = ({ initialMode }) => {
@@ -66,12 +66,14 @@ export const AuthPages: React.FC<{ initialMode: 'login' | 'signup' }> = ({ initi
         languages: finalLanguages,
         studyGoals: '',
         preferredTimes: '',
-      });
+      }, password);
     } else {
       
-      const success = login(email);
-      if (success) {
+      const result = login(email, password);
+      if (result === 'success') {
         setView('dashboard');
+      } else if (result === 'wrong_password') {
+        setError("Incorrect password. Please try again!");
       } else {
         setError("Invalid email address. Please make sure you have signed up first!");
       }

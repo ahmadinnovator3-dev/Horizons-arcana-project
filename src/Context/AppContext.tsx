@@ -9,7 +9,7 @@ import {
   UserStats, 
   ChatMessage,
   ChatSession,
-  TimeTableEntry,
+  TimetableEntry,
   MemoryFile,
   MemoryFolder
 } from '../types';
@@ -21,8 +21,8 @@ interface AppContextType {
   currentUser: UserProfile | null;
   setCurrentUser: (user: UserProfile | null) => void;
   usersDb: Record<string, UserProfile>;
-  signUp: (profile: Omit<UserProfile, 'companion' | 'createdAt'>) => void;
-  login: (email: string) => boolean;
+  signUp: (profile: Omit<UserProfile, 'companion' | 'createdAt'>, password?: string) => void;
+  login: (email: string, password?: string) => 'success' | 'wrong_password' | 'not_found';
   logout: () => void;
   updateProfile: (profile: Partial<UserProfile>) => void;
   reviewerLogin: () => void;
@@ -85,8 +85,8 @@ interface AppContextType {
   deleteChatSession: (id: string) => void;
 
   
-  timetable: TimeTableEntry[];
-  addTimetableEntry: (entry: Omit<TimeTableEntry, 'id'>) => void;
+  timetable: TimetableEntry[];
+  addTimetableEntry: (entry: Omit<TimetableEntry, 'id'>) => void;
   deleteTimetableEntry: (id: string) => void;
 
   
@@ -113,7 +113,7 @@ const defaultCompanion: CompanionCustomization = {
 };
 
 const initialAchievements: Achievement[] = [
-  { id: 'first_task', title: 'Assignment Hero', description: 'Complete your first assignment.', category: 'Planner', icon: '📝', unlocked: false },
+  { id: 'first_task', title: 'Assignment Hero', description: 'Complete your first assignment.', category: 'planner', icon: '📝', unlocked: false },
   { id: 'first_focus', title: 'Focus Warrior', description: 'Complete your first study session.', category: 'focus', icon: '⚡', unlocked: false },
   { id: 'study_champion', title: 'Study Champion', description: 'Log a total of 10 hours of focused study.', category: 'focus', icon: '👑', unlocked: false },
   { id: 'first_week', title: 'Week Streak', description: 'Log in and stay active for 7 days in a row.', category: 'streak', icon: '🔥', unlocked: false },
@@ -143,7 +143,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [tasks, setTasks] = useState<Task[]>([]);
   const [moodEntries, setMoodEntries] = useState<MoodEntry[]>([]);
   const [savedChats, setSavedChats] = useState<ChatSession[]>([]);
-  const [timetable, setTimetable] = useState<TimeTableEntry[]>([]);
+  const [timetable, setTimetable] = useState<TimetableEntry[]>([]);
   const [lastLearningActivityTime, setLastLearningActivityTime] = useState<number>(Date.now());
   const [folders, setFolders] = useState<MemoryFolder[]>(defaultFolders);
   
@@ -283,7 +283,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     updatedTasks: Task[],
     updatedMood: MoodEntry[],
     updatedSavedChats: ChatSession[],
-    updatedTimetable: TimeTableEntry[],
+    updatedTimetable: TimetableEntry[],
     updatedLastActivity: number,
     updatedAchievements: Achievement[],
     updatedStats: UserStats,
@@ -355,11 +355,12 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   };
 
   
-  const signUp = (profile: Omit<UserProfile, 'companion' | 'createdAt'>) => {
+  const signUp = (profile: Omit<UserProfile, 'companion' | 'createdAt'>, password?: string) => {
     const freshUser: UserProfile = {
       ...profile,
       companion: defaultCompanion,
       createdAt: new Date().toISOString(),
+      password,
     };
     const updatedDb = { ...usersDb, [profile.email]: freshUser };
     setUsersDb(updatedDb);
@@ -369,9 +370,14 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setView('onboarding');
   };
 
-  const login = (email: string): boolean => {
+  const login = (email: string, password?: string): 'success' | 'wrong_password' | 'not_found' => {
     const user = usersDb[email];
     if (user) {
+      
+      if (user.password !== password) {
+        return 'wrong_password';
+      }
+
       setCurrentUser(user);
       
       
@@ -416,9 +422,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
       setCompanionState('Idle');
       setView('dashboard');
-      return true;
+      return 'success';
     }
-    return false;
+    return 'not_found';
   };
 
   const logout = () => {
@@ -474,7 +480,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       studyGoals: tempOnboardingData.studyGoals || 'To master my homework and build stellar notes!',
       preferredTimes: tempOnboardingData.preferredTimes || 'Evening',
       companion: customization,
-      createdAt: new Date().toISOString()
+      createdAt: new Date().toISOString(),
+      password: tempOnboardingData.password,
     };
 
     const updatedDb = { ...usersDb, [finalProfile.email]: finalProfile };
@@ -485,7 +492,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setCurrentUser(finalProfile);
     setCompanionCustomization(customization);
     setCompanionState('Celebrating');
-    setOnboardingStep(4); 
+    setOnboardingStep(4); // Advance to welcome
   };
 
   const updateTempOnboardingData = (data: Partial<UserProfile>) => {
@@ -595,7 +602,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   
   const addMoodEntry = (score: number, note?: string) => {
-    const newEntry: MoodEntry = {
+    const newEntry = {
       id: Math.random().toString(36).substring(2, 9),
       date: new Date().toLocaleDateString(),
       score,
@@ -650,8 +657,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   };
 
   
-  const addTimetableEntry = (entry: Omit<TimeTableEntry, 'id'>) => {
-    const newEntry: TimeTableEntry = {
+  const addTimetableEntry = (entry: Omit<TimetableEntry, 'id'>) => {
+    const newEntry: TimetableEntry = {
       ...entry,
       id: Math.random().toString(36).substring(2, 9),
     };
